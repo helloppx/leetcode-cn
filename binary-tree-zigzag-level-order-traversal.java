@@ -51,6 +51,7 @@ class Solution {
                      nullCount++;
                  }
             }
+            //这里控制遍历方向，两处×2的地方比较关键
             if(nullCount + count >= level){
                 res.add(tmp);
                 tmp = new LinkedList<>();
