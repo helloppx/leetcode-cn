@@ -1,0 +1,58 @@
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public Node left;
+    public Node right;
+    public Node next;
+
+    public Node() {}
+    
+    public Node(int _val) {
+        val = _val;
+    }
+
+    public Node(int _val, Node _left, Node _right, Node _next) {
+        val = _val;
+        left = _left;
+        right = _right;
+        next = _next;
+    }
+};
+*/
+class Solution {
+    public Node connect(Node root) {
+        if(root == null) return root;
+        Queue<Node> queue = new LinkedList<>();
+        queue.offer(root);
+        
+        Node pre = null;
+        int level = 1;
+        int count = 0;
+        while(queue.size() != 0){
+            Node node = queue.poll();
+            if(node.left == null) continue;
+            queue.offer(node.left);
+            queue.offer(node.right);
+            node.left.next = node.right;
+            
+            count++;
+            if(count == level){
+                if(pre != null)  pre.next = node.left;
+                count = 0;
+                level = level << 1;
+                pre = null;
+            }else {
+                if(pre == null) pre = node.right;
+                else {
+                    pre.next = node.left;
+                    pre = node.right;
+                }
+                
+            }
+            
+        }
+        return root;
+        
+    }
+}
