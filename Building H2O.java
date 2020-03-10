@@ -7,7 +7,7 @@ class H2O {
     }
 
     public void hydrogen(Runnable releaseHydrogen) throws InterruptedException {
-		h.acquire();
+	h.acquire();
         // releaseHydrogen.run() outputs "H". Do not change or remove this line.
         releaseHydrogen.run();
         o.release();
@@ -18,5 +18,52 @@ class H2O {
         // releaseOxygen.run() outputs "O". Do not change or remove this line.
 		releaseOxygen.run();
         h.release(2);
+    }
+}
+
+
+class H2O {
+    private Lock lock = new ReentrantLock();
+    private Condition h = lock.newCondition();
+    private Condition o = lock.newCondition();
+    private int state = 0;
+    
+    public H2O() {
+        
+    }
+
+    public void hydrogen(Runnable releaseHydrogen) throws InterruptedException {
+        lock.lock();
+        try{
+            while(state == 0){
+                h.await();
+            }
+            // releaseHydrogen.run() outputs "H". Do not change or remove this line.
+            releaseHydrogen.run();
+            
+            if(state == 2) {
+                state = 0;
+                o.signal();
+            }else{
+               state++;
+            }
+        }finally{
+            lock.unlock();
+        }
+    }
+
+    public void oxygen(Runnable releaseOxygen) throws InterruptedException {
+        lock.lock();
+        try{
+            while(state != 0) {
+                o.await();
+            }
+            // releaseOxygen.run() outputs "O". Do not change or remove this line.
+		    releaseOxygen.run();
+            state = 1;
+            h.signal();
+        }finally{
+            lock.unlock();
+        }
     }
 }
