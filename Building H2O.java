@@ -67,3 +67,39 @@ class H2O {
         }
     }
 }
+
+
+
+
+class H2O {
+    private int state = 0;
+    
+    public H2O() {
+        
+    }
+
+    public synchronized void hydrogen(Runnable releaseHydrogen) throws InterruptedException {
+        while(state == 0){
+            wait();
+        }
+        
+        // releaseHydrogen.run() outputs "H". Do not change or remove this line.
+        releaseHydrogen.run();
+        if(state == 1){
+            state = 2;
+        }else {
+            state = 0;
+        }
+        notify();
+    }
+
+    public synchronized void oxygen(Runnable releaseOxygen) throws InterruptedException {
+        while(state != 0){
+            wait();
+        }
+        // releaseOxygen.run() outputs "O". Do not change or remove this line.
+		releaseOxygen.run();
+        state = 1;
+        notify();
+    }
+}
