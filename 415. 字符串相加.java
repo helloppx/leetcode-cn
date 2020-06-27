@@ -45,3 +45,38 @@ class Solution {
         return sb.substring(index, sb.length());
     }
 }
+
+
+
+class Solution {
+    public String addStrings(String num1, String num2) {
+        StringBuilder sb = new StringBuilder();
+      
+        int power = 0;
+        int i = num1.length() - 1;
+        int j = num2.length() - 1;
+        for(; i > -1 || j > -1; i--, j--){
+            int x = 0;
+            if(i > -1){
+                x = num1.charAt(i) - '0';
+            }
+            int y = 0;
+            if(j > -1){
+                y = num2.charAt(j) - '0';
+            }
+            int sum = x + y + power;
+            if(sum >= 10) {
+                power = 1;
+                sum = sum % 10;
+            }else{
+                power = 0;
+            }
+            sb.insert(0, sum);
+        }
+        
+        if(power != 0) {
+            sb.insert(0, 1);
+        }
+        return sb.toString();
+    }
+}
