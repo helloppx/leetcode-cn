@@ -70,3 +70,91 @@ class LRUCache {
  * int param_1 = obj.get(key);
  * obj.put(key,value);
  */
+
+
+class LRUCache {
+    private static class Node {
+        public int key;
+        public int value;
+        public Node pre;
+        public Node next;
+
+        public Node(int key, int value) {
+            this.key = key;
+            this.value = value;
+        }
+    }
+
+    private int capacity = 0;
+    private int size = 0;
+    private Node head = null;
+    private Map<Integer, Node> map = new HashMap<>();
+
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+    }
+    
+    public int get(int key) {
+        Node res = map.get(key);
+        if(res == null) return -1;
+        moveToHead(res);
+        return head.value;
+    }
+    
+    public void put(int key, int value) {
+        Node node = new Node(key, value);
+        if(head == null) {
+            size = 1;
+            head = node;
+            head.next = head;
+            head.pre = head;
+            map.put(key, head);
+            return;
+        }
+        int x = get(key);
+        if(x != -1) {
+            head.value = value;
+            return;
+        }
+        if(size == capacity){
+            map.remove(head.pre.key);
+            head.pre.key = key;
+            head.pre.value = value;
+            head = head.pre;
+            map.put(key, head);
+        }else{
+            size++;
+            node.pre = head.pre;
+            head.pre.next = node;
+
+            node.next = head;
+            head.pre = node;
+
+            head = node;
+            map.put(key, head);
+        }
+    }
+
+    private void moveToHead(Node curr) {
+        if(curr == head) return;
+        curr.pre.next = curr.next;
+        curr.next.pre = curr.pre;
+ 
+        curr.pre = head.pre;
+        head.pre.next = curr;
+
+        curr.next = head;
+        head.pre = curr;
+
+        head = curr;
+    }
+}
+ 
+ 
+ 
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache obj = new LRUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */
