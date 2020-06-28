@@ -37,4 +37,25 @@ class Solution {
         }
         return res;
     }
+
+    // Set<Character> set = new HashSet<>();
+    // Map<Character, Integer> map = new HashMap<>();
+    // int res = 0;
+    // int i = 0;
+    // while(i < s.length()) {
+    //     char each = s.charAt(i);
+    //     if(set.contains(each)) {
+    //         int tmp = set.size();
+    //         res = res < tmp ? tmp : res;
+    //         set.clear();
+    //         i = map.get(each) + 1; 
+    //     }else{
+    //         set.add(each);
+    //         map.put(each, i);
+    //         i++;
+    //     }
+    // }
+    
+    // res = res < set.size() ? set.size() : res;
+    // return res;
 }
