@@ -83,3 +83,53 @@ public class BlockingQueue {
     }
 }
 
+
+
+
+class ZeroEvenOdd {
+    private Object[] data;
+    private int size;
+    private int count;
+    private int left;
+    private int right;
+
+    public ZeroEvenOdd(int size) {
+        this.size = size;
+        this.count = 0;
+        this.left = 0;
+        this.right = 0;
+        this.data = new Object[size];
+    }
+
+    private boolean isEmpty() {
+        return count == 0;
+    }
+
+    private boolean isFull() {
+        return count == size;
+    }
+
+    private synchronized void offer(Object ele) throws InterruptedException {
+        while (isFull()) {
+            wait();
+        }
+        System.out.println("OFFER");
+        data[right++] = ele;
+        count++;
+        if(right >= size) right = 0;
+        notifyAll();
+    }
+
+
+    private synchronized Object poll() throws InterruptedException {
+        while (isEmpty()) {
+            wait();
+        }
+        System.out.println("POLL");
+        Object res = data[left++];
+        count--;
+        if(left >= size) left = 0;
+        notifyAll();
+        return res;
+    }
+}
