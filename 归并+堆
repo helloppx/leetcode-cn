@@ -13,43 +13,58 @@
 // 定义：
 // M 数组的个数   N是数组的平均长度
 
-static class Entry implement Compareable{
-    int index;
-    int data;
-    int subIndex;
 
-    public Entry(int index, int data, int subIndex){
-        this.index = index;
-        this.data = data;
-        this.subIndex = subIndex;
-    }
+public class Merge {
 
-    public int compareTo(Entry other) {
-        return this.data - other.data;
-    }
-}
-    
-public List<Integer> margeSort(int[]... arrays){
-  	List<Integer> res = new ArrayList<>();
-  	PriorityQueue<Entry> q = new PriorityQueue<>();
-  
-	for(int i = 0; i < arrays.length; i++) {
-    	int [] each = arrays[i];
-		Entry obj = new Entry(i, each[0], 0);      	
-      	q.offer(obj);
-    }
-  
-  	while(q.size() != 0) {
-    	Entry each = q.pop();
-      	res.addd(each.data);
-      	int index = each.index;
-      	int subIndex = each.subIndex;
-      	if(subIndex == arrays[index].length){
-        	continue;
-        }else{
-          	int value = arrays[index][subIndex+1];
-          	Entry obj = new Entry(index, value, subIndex+1);
-      		q.offer(obj);
+    static class Entry implements Comparable<Entry>{
+        int index;
+        int data;
+        int subIndex;
+
+        public Entry(int index, int data, int subIndex){
+            this.index = index;
+            this.data = data;
+            this.subIndex = subIndex;
         }
+
+        public int compareTo(Entry other) {
+            return this.data - other.data;
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] a = new int[] {-1};
+        int[] b = new int[] {1,3,5,5,6,8};
+        int[] c = new int[] {1,9};
+        int[] d = new int[] {11,15,17};
+        int[] e = new int[] {1,16};
+
+        System.out.println(margeSort(a,b,c,d,e));
+    }
+
+    public static List<Integer> margeSort(int[]... arrays){
+        List<Integer> res = new ArrayList<>();
+        PriorityQueue<Entry> q = new PriorityQueue<>();
+
+        for(int i = 0; i < arrays.length; i++) {
+            int [] each = arrays[i];
+            Entry obj = new Entry(i, each[0], 0);
+            q.offer(obj);
+        }
+
+        while(q.size() != 0) {
+            Entry each = q.poll();
+            res.add(each.data);
+            int index = each.index;
+            int subIndex = each.subIndex;
+            if(subIndex == arrays[index].length - 1){
+                continue;
+            }else{
+                int value = arrays[index][subIndex+1];
+                Entry obj = new Entry(index, value, subIndex+1);
+                q.offer(obj);
+            }
+        }
+        return res;
     }
 }
